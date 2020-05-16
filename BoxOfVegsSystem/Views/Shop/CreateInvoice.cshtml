@@ -1,0 +1,88 @@
+﻿@model InvoiceDetailViewModel
+    <link rel="stylesheet" href="~/Content/css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/css/invoice/invoice.css">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="row p-5">
+                            <div class="col-12 text-center invoice-title-block">
+                                <h1>Invoice</h1>
+                            </div>
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-md-6 logo-block">
+                                        <img src="~/Content/images/logo.png">
+                                        <p class="mb-1">Leicester</p>
+                                        <p class="mb-1">United Kingdom</p>
+                                    </div>
+                                    <div class="col-md-6 text-right">
+                                        <p class="font-weight-bold mb-1">Invoice No: #@Model.InvoiceID</p>
+                                        <p class="text-muted">Due to: @Model.InvoiceDate.ToShortDateString()</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-5">
+                        <div class="row pb-5 p-5">
+                            <div class="col-md-6">
+                                <p class="font-weight-bold mb-4">Customer Information</p>
+                                <p class="mb-1">@Model.FirstName @Model.LastName</p>
+                                <p class="mb-1">@Model.Address, @Model.City</p>
+                                <p class="mb-1">@Model.PostCode</p>
+                                <p class="mb-1">United Kingdom</p>
+                                <p class="mb-1">@Model.PhoneNumber</p>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <p class="font-weight-bold mb-4">Payment Details</p>
+                                <p class="mb-1"><span class="text-muted">VAT: </span> 1425782</p>
+                                <p class="mb-1"><span class="text-muted">VAT ID: </span> 10253642</p>
+                                <p class="mb-1"><span class="text-muted">Payment Type: </span> PayPal</p>
+                                <p class="mb-1"><span class="text-muted">Name: </span> @Model.FirstName @Model.LastName</p>
+                            </div>
+                        </div>
+                        <div class="row p-5">
+                            <div class="col-md-12">
+                                <table class="table text-center">
+                                    <thead>
+                                        <tr>
+                                            <th class="border-0 text-uppercase small font-weight-bold">ID</th>
+                                            <th class="border-0 text-uppercase small font-weight-bold">Item</th>
+                                            <th class="border-0 text-uppercase small font-weight-bold">Quantity</th>
+                                            <th class="border-0 text-uppercase small font-weight-bold">Unit Cost</th>
+                                            <th class="border-0 text-uppercase small font-weight-bold">Discount</th>
+                                            <th class="border-0 text-uppercase small font-weight-bold">Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{ decimal total=0;}
+                                        @foreach (var item in Model.Orders)
+                                        {                                            
+                                            decimal subtotal = (item.soldUnitPrice * item.quantity);
+                                            <tr>
+                                                <td>@item.orderID</td>
+                                                <td>@item.product.productName</td>
+                                                <td>@item.quantity</td>
+                                                <td>£@item.soldUnitPrice</td>
+                                                <td>@item.soldUnitDiscount %</td>
+                                                <td>£@subtotal</td>
+                                            </tr>
+                                            total += subtotal;
+                                        }
+
+
+                                        <tr>
+                                            <td colspan="4"></td>
+                                            <th>Total</th>
+                                            <td>£@total</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

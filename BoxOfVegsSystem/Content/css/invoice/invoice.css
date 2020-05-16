@@ -1,0 +1,14 @@
+body {
+    margin: 30px 0;
+}
+.invoice-title-block {
+    margin-bottom: 50px !important;
+}
+.invoice-title-block h1 {
+    text-decoration: underline;
+}
+.logo-block img{
+    border: 2px solid #000;
+    padding: 10px;
+    margin-bottom: 10px;
+}

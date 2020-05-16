@@ -1,0 +1,341 @@
+﻿@model ProductListViewModel
+@{
+    ViewBag.Title = "Products";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- breadcrumb-->
+<div class="bov-breadcrumb admin">
+    <ul>
+        <li><a class="breadcrumb-link"><i class="far fa-file"></i> Products</a></li>
+
+    </ul>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header align-middle">
+        <p><i class="fas fa-table"></i> Product Detail</p>
+        <button class="square-btn black admin-table right" type="button" onclick="location.href='@Url.Action("AddOrEditProduct","Product",new { productID=0 })'">Add New</button>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table" id="datatable">
+                <thead>
+                    <tr>
+                        <th scope="col">No.</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">purchase(£)</th>
+                        <th scope="col">Profit(%)</th>
+                        <th scope="col">Discount(%)</th>
+                        <th scope="col">Final Price(£)</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.Products)
+                    {
+                        <tr>
+                            <td scope="row">@(Model.Products.IndexOf(item) + 1)</td>
+                            <td scope="row">@item.productName</td>
+                            <td scope="row">@item.category.categoryName</td>
+                            <td scope="row">@item.quantity</td>
+                            <td scope="row">@item.purchasedPrice</td>
+                            @if (item.purchasedPrice != 0 || item.purchasedPrice != null)
+                            {
+
+                                <td scope="row">@item.profitPercentage <button type="button" id="@item.productID" class="square-btn black admin-table right editProfit">Edit</button></td>
+                            }
+                            else
+                            {
+                                <td scope="row">@item.profitPercentage</td>
+                            }
+                            @if (item.profitPercentage != null && item.profitPercentage != 0)
+                            {
+
+                                <td scope="row">@item.discount <button type="button" id="@item.productID" class="square-btn black admin-table right editDiscount">Edit</button></td>
+
+                            }
+                            else
+                            {
+                                <td scope="row"> @item.discount </td>
+                            }
+                            <td scope="row">@item.sellPrice</td>
+                            <td scope="row">
+                                <div class="table-action">
+                                    <button type="button" id="editBtn" class="square-btn black admin-table" onclick="location.href='@Url.Action("AddOrEditProduct",new { productID= item.productID })'">Edit</button>
+                                    <button type="button" data-id="@item.productID" class="square-btn red admin-table ProdeleteBtn">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@*Modal for Edit profit of the product*@
+
+<div class="modal fade" id="profitModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="ModalTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form">
+                    <fieldset id="SubmitForm">
+                        @Html.HiddenFor(m => m.ProductId, new { @id = "productId" })
+
+                        <div class="form-group">
+                            @Html.TextBoxFor(m => m.profit, new { @id = "profit", @class = "form-control", @placeholder = "profit in percentage*" })
+                        </div>
+                        <div class="form-group">
+                            <label>Purchased Unit Price</label>
+                            @Html.TextBoxFor(m => m.purchasedPrice, new { @id = "purchasePrice", @class = "form-control", @disabled = "disabled" })
+                        </div>
+                        <div class="form-group">
+                            <label>Final Sell Price</label>
+                            @Html.TextBoxFor(m => m.sellPrice, new { @id = "sellPrice", @class = "form-control", @disabled = "disabled" })
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="square-btn black admin" id="SaveProfit">Save</button>
+                        </div>
+
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@*Modal for Edit discount of the product*@
+
+<div class="modal fade" id="discountModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="ModalTitleDis"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formDis">
+                    <fieldset id="SubmitFormDis">
+                        @Html.HiddenFor(m => m.ProductId, new { @id = "productIdDis" })
+
+                        <div class="form-group">
+                            @Html.TextBoxFor(m => m.discount, new { @id = "discountDis", @class = "form-control", @placeholder = "Discount in percentage*" })
+                        </div>
+                        <div class="form-group">
+                            <label>Profit Margin(%)</label>
+                            @Html.TextBoxFor(m => m.profit, new { @id = "profitDis", @class = "form-control", @disabled = "disabled" })
+                        </div>
+                        <div class="form-group">
+                            <label>Purchased Unit Price</label>
+                            @Html.TextBoxFor(m => m.purchasedPrice, new { @id = "purchasePriceDis", @class = "form-control", @disabled = "disabled" })
+                        </div>
+                        <div class="form-group">
+                            <label>Final Sell Price</label>
+                            @Html.TextBoxFor(m => m.sellPrice, new { @id = "sellPriceDis", @class = "form-control", @disabled = "disabled" })
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="square-btn black admin" id="SaveDiscount">Save</button>
+                        </div>
+
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(".editProfit").click(function () {
+        $("#profitModal").modal();
+        $("#ModalTitle").html("Set Profit Margin on Product");
+
+        $.ajax({
+            url: '@Url.Action("GetProductById","Product")',
+            data: {proId: $(this).attr('id')}
+
+        })
+            .done(function (response) {
+                $("#productId").val(response.ProductId);
+                $("#profit").val(response.profit);
+                $("#purchasePrice").val(response.purchasedPrice);
+                $("#sellPrice").val(response.sellPrice);
+
+        })
+    });
+    $("#profit").change(function () {
+        var profit = $("#profit").val();
+        var price = $("#purchasePrice").val();
+        var final = 0;
+            if (profit==0) {
+
+                $("#sellPrice").val("Profit margine not set yet");
+            }
+            else {
+                var increase = parseFloat((parseFloat(profit) / 100) * parseFloat(price)).toFixed(2);
+                 final = parseFloat(parseFloat(price) + parseFloat(increase)).toFixed(2);
+                $("#sellPrice").val(final);
+            }
+    });
+    $("#SaveProfit").click(function () {
+        var profit = $("#profit").val();
+        var final = $("#sellPrice").val();
+        var id = $("#productId").val();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("AddOrEditProduct","Product")',
+            data: {
+                ProductId: id,
+                sellPrice: final,
+                profit: profit
+            }
+
+        })
+            .done(function (result) {
+                $("#profitModal").modal("hide");
+                Swal.fire({
+                        title:'Added!',
+                        text: 'Profit Margine',
+                        icon: 'success',
+                        confirmButtonText:'OK'
+                    }).then((result) => {
+                        if (result.value) {
+                            location.reload(true);
+                        }
+                    })
+
+
+        })
+    });
+    $(".editDiscount").click(function () {
+        $("#discountModal").modal();
+        $("#ModalTitleDis").html("Set Discount on Product");
+
+        $.ajax({
+            url: '@Url.Action("GetProductById","Product")',
+            data: {proId: $(this).attr('id')}
+
+        })
+            .done(function (response) {
+                $("#productIdDis").val(response.ProductId);
+                $("#discountDis").val(response.discount);
+                $("#profitDis").val(response.profit);
+                $("#purchasePriceDis").val(response.purchasedPrice);
+                $("#sellPriceDis").val(response.sellPrice);
+
+        })
+    });
+    $("#discountDis").change(function () {
+      
+        
+        var profit = $("#profitDis").val();
+        var price= $("#purchasePriceDis").val();
+        var discount = $("#discountDis").val();
+        var increase = parseFloat((parseFloat(profit) / 100) * parseFloat(price)).toFixed(2);
+        var final = parseFloat(parseFloat(price) + parseFloat(increase)).toFixed(2);
+        var decrease = parseFloat((parseFloat(discount) / 100) * parseFloat(final)).toFixed(2);
+        var finalSell = parseFloat(parseFloat(final) - parseFloat(decrease)).toFixed(2);
+         $("#sellPriceDis").val(finalSell);  
+    });
+    $("#SaveDiscount").click(function () {
+        var profit = $("#profitDis").val();
+        var final = $("#sellPriceDis").val();
+        var discount = $("#discountDis").val();
+        var id = $("#productIdDis").val();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("AddOrEditProduct","Product")',
+            data: {
+                ProductId: id,
+                sellPrice: final,
+                profit: profit,
+                discount: discount
+            }
+
+        })
+            .done(function (result) {
+                $("#discountModal").modal("hide");
+                Swal.fire({
+                        title:'Added!',
+                        text: 'Discount',
+                        icon: 'success',
+                        confirmButtonText:'OK'
+                    }).then((result) => {
+                        if (result.value) {
+                            location.reload(true);
+                        }
+                    })
+
+
+        })
+    });
+    
+    $(".ProdeleteBtn").click(function () {
+        const swalWithBtn = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonStyling:false
+        })
+        swalWithBtn.fire({
+            title: 'Are You Sure, You Want To Delete?',
+            text: "",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: 'No',
+            reverseButtons:true
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Delete","Product")',
+                data: {
+                    productID: $(this).attr('data-id')
+                }
+
+                })
+                .done(function (response) {
+                    swalWithBtn.fire({
+                        title:'Deleted!',
+                        text: response.message,
+                        icon: 'success',
+                        confirmButtonText:'OK'
+                    }).then((result) => {
+                        if (result.value) {
+                            location.reload(true);
+                        }
+                    })
+
+
+                })
+                .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("FAIL");
+                })
+
+            } else if (result.dismiss === swal.DismissReason.cancel) {
+                swalWithBtn.fire(
+                    'cancelled',
+                    'Product has not been deleted',
+                    'error'
+                )
+            }
+
+        })
+
+    });
+
+</script>
+

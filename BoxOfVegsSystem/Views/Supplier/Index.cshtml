@@ -1,0 +1,122 @@
+﻿@model SupplierListViewModel
+@{
+    ViewBag.Title = "Suppliers";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- breadcrumb-->
+<div class="bov-breadcrumb admin">
+    <ul>
+        <li><a class="breadcrumb-link"><i class="far fa-file"></i> Suppliers</a></li>
+
+    </ul>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header align-middle">
+        <p><i class="fas fa-table"></i> Supplier Detail</p>
+        <button class="square-btn black admin-table right" type="button" onclick="location.href='@Url.Action("AddOrEditSupplier","Supplier",new { supplierID=0 })'">Add New</button>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table" id="datatable">
+                <thead>
+                    <tr>
+                        <th scope="col">No.</th>
+                        <th scope="col">Company</th>
+                        <th scope="col">Contact to</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">PostCode</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                        @foreach (var item in Model.Suppliers)
+                        {
+                            <tr>
+                                <td scope="row">@(Model.Suppliers.IndexOf(item) + 1)</td>
+                                <td scope="row">@item.companyName</td>
+                                <td scope="row">@item.contactPerson</td>
+                                <td scope="row">@item.address</td>
+                                <td scope="row">@item.postCode</td>
+                                <td scope="row">@item.PhoneNo</td>
+                                <td scope="row">@item.email</td>
+                                <td scope="row">
+                                    <div class="table-action">
+                                        <button type="button" id="resetBtn" class="square-btn black admin-table" onclick="location.href='@Url.Action("AddOrEditSupplier",new { supplierID= item.supplierID })'">Edit</button>
+                                        <button type="button" data-id="@item.supplierID" class="square-btn red admin-table ProdeleteBtn">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    
+                  
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $(".ProdeleteBtn").click(function () {
+        const swalWithBtn = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonStyling:false
+        })
+        swalWithBtn.fire({
+            title: 'Are You Sure, You Want To Delete?',
+            text: "",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: 'No',
+            reverseButtons:true
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Delete","Supplier")',
+                data: {
+                    supplierID: $(this).attr('data-id')
+                }
+
+            })
+                    .done(function (response) {
+                        swalWithBtn.fire({
+                            title:'Deleted!',
+                            text: response.message,
+                            icon: 'success',
+                            confirmButtonText:'OK'
+                        }).then((result) => {
+                            if (result.value) {
+                                location.reload(true);
+                            }
+                        })
+
+
+                    })
+                .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("FAIL");
+                })
+
+            } else if (result.dismiss === swal.DismissReason.cancel) {
+                swalWithBtn.fire(
+                    'cancelled',
+                    'Supplier has not been deleted',
+                    'error'
+                )
+            }
+
+        })
+
+    });
+
+</script>
+
+

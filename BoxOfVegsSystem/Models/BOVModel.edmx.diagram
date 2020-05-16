@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="a7d10a874ffd45998699a6d09941d393" Name="Diagram1">
+        <EntityTypeShape EntityType="boxofvegsDBModel.category" Width="1.5" PointX="3" PointY="14.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="boxofvegsDBModel.purchasedProduct" Width="1.5" PointX="7.5" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="boxofvegsDBModel.supplier" Width="1.5" PointX="3" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="boxofvegsDBModel.C__MigrationHistory" Width="1.5" PointX="10.75" PointY="0.75" />
+        <EntityTypeShape EntityType="boxofvegsDBModel.AspNetRole" Width="1.5" PointX="7.75" PointY="11.5" />
+        <EntityTypeShape EntityType="boxofvegsDBModel.AspNetUserClaim" Width="1.5" PointX="12.25" PointY="10" />
+        <EntityTypeShape EntityType="boxofvegsDBModel.AspNetUserLogin" Width="1.5" PointX="12.25" PointY="12.75" />
+        <EntityTypeShape EntityType="boxofvegsDBModel.AspNetUser" Width="1.5" PointX="10" PointY="10.375" />
+        <AssociationConnector Association="boxofvegsDBModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="boxofvegsDBModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="boxofvegsDBModel.AspNetUserRoles" />
+        <EntityTypeShape EntityType="boxofvegsDBModel.purchase" Width="1.5" PointX="5.25" PointY="2.5" />
+        <AssociationConnector Association="boxofvegsDBModel.FK__purchased__purch__04E4BC85" />
+        <AssociationConnector Association="boxofvegsDBModel.FK__purchases__suppl__66603565" />
+        <EntityTypeShape EntityType="boxofvegsDBModel.userDetail" Width="1.5" PointX="3.125" PointY="8.875" />
+        <EntityTypeShape EntityType="boxofvegsDBModel.userReview" Width="1.5" PointX="7.5" PointY="14.375" />
+        <AssociationConnector Association="boxofvegsDBModel.FK__userRevie__userD__3B40CD36" />
+        <EntityTypeShape EntityType="boxofvegsDBModel.invoice" Width="1.5" PointX="5.375" PointY="8.625" />
+        <AssociationConnector Association="boxofvegsDBModel.FK__invoices__userDe__3E1D39E1" />
+        <EntityTypeShape EntityType="boxofvegsDBModel.order" Width="1.5" PointX="7.625" PointY="7.75" />
+        <EntityTypeShape EntityType="boxofvegsDBModel.product" Width="1.5" PointX="5.25" PointY="13.75" />
+        <AssociationConnector Association="boxofvegsDBModel.FK__products__catego__4D94879B" />
+        <AssociationConnector Association="boxofvegsDBModel.FK__orders__invoiceI__40F9A68C" />
+        <AssociationConnector Association="boxofvegsDBModel.FK__orders__productI__41EDCAC5" />
+        <AssociationConnector Association="boxofvegsDBModel.FK__purchased__produ__05D8E0BE" />
+        <AssociationConnector Association="boxofvegsDBModel.FK__userRevie__produ__5FB337D6" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,41 @@
+﻿@model BoxOfVegsSystem.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+
+<!-- Registration form-->
+<section class="login-account">
+    <div class="container">
+        <div class="row">
+            <div class="mx-auto col-md-6 col-12">
+                <h1 class="title">Register</h1>
+                @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                    <label>Email</label>
+                    @Html.TextBoxFor(m => m.Email, new { @class = "square-input" })
+                    <label>Password</label>
+                    @Html.PasswordFor(m => m.Password, new { @class = "square-input" })
+                    <label>Confirm Password</label>
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "square-input" })
+                    <label for="first-name">First Name *</label>
+                    @Html.TextBoxFor(m => m.FirstName, new { @class = "square-input" })
+                    <label for="last-name">Last Name *</label>
+                    @Html.TextBoxFor(m => m.LastName, new { @class = "square-input" })
+                    <div class="account-function">
+                        <button class="square-btn" type="submit">Register</button>
+                        <a class="create-account" href="@Url.Action("Index", "Account")">Or Login</a>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,122 @@
+﻿@model ShopViewModels
+@{
+    ViewBag.Title = "Shop";
+    var imageurl = "default-placeholder-image.png";
+}
+
+<!-- breadcrumb-->
+<div class="bov-breadcrumb">
+    <div class="container">
+        <ul>
+            <li><a class="breadcrumb-link" href="@Url.Action("Index", "Home")"><i class="fas fa-home"></i> Home</a></li>
+            <li><a class="breadcrumb-link"><i class="fa fa-store"></i> Shop</a></li>
+        </ul>
+    </div>
+</div>
+<!--BOV Shop Layout -->
+<section id="bov-shop-layout">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-3">
+                <div id="bov-shop-sidebar">
+                    <button class="square-btn" id="sidebar-close-btn">Close</button>
+                    <div class="shop-departments">
+                        <div class="departments-top tab-title underline">
+                            <h2 class="title">Departments</h2>
+                        </div>
+                        <div class="department-bottom">
+                            <ul>
+                                @foreach (var Categories in Model.ShopCategories)
+                                {
+                                    <li><a class="department-link filterLink @(Model.CategoryID.HasValue && Model.CategoryID.Value == Categories.categoryID ? "active" : string.Empty)" href="@Url.Action("Index", "Shop", new { categoryID = Categories.categoryID, sortBy = Model.SortBy })">@Categories.categoryName</a></li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="Fitler-by shop-departments">
+                        <div class="departments-top tab-title underline">
+                            <h2 class="title">Sort By</h2>
+                        </div>
+                        <div class="department-bottom">
+                            <ul>
+                                <li><a class="department-link filterLink @(Model.SortBy.HasValue ? Model.SortBy.Value == 1 ? "active" : string.Empty : string.Empty)" href="@Url.Action("Index", "Shop", new { sortBy=1, categoryID = Model.CategoryID })">Newest First</a></li>
+                                <li><a class="department-link filterLink @(Model.SortBy.HasValue ? Model.SortBy.Value == 2 ? "active" : string.Empty : string.Empty)" href="@Url.Action("Index", "Shop", new { sortBy=2, categoryID = Model.CategoryID })">Sort: A to Z</a></li>
+                                <li><a class="department-link filterLink @(Model.SortBy.HasValue ? Model.SortBy.Value == 3 ? "active" : string.Empty : string.Empty)" href="@Url.Action("Index", "Shop", new { sortBy=3, categoryID = Model.CategoryID })">Sort: Z to A</a></li>
+                                <li><a class="department-link filterLink @(Model.SortBy.HasValue ? Model.SortBy.Value == 4 ? "active" : string.Empty : string.Empty)" href="@Url.Action("Index", "Shop", new { sortBy=4, categoryID = Model.CategoryID })">Price: Low to High</a></li>
+                                <li><a class="department-link filterLink @(Model.SortBy.HasValue ? Model.SortBy.Value == 5 ? "active" : string.Empty : string.Empty)" href="@Url.Action("Index", "Shop", new { sortBy=5, categoryID = Model.CategoryID })">Price: High to Low</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="reset-btn-block">
+                        <a class="btn btn-lg normal-btn" role="button" title="Reset" href="@Url.Action("Index", "Shop")">Reset</a>
+                    </div>
+                </div>
+                <div class="sidebar-background"></div>
+            </div>
+            <div class="col-xl-9">
+                <div class="shop-products">
+                    <div class="shop-products-top tab-title underline">
+                        <div class="row align-items-center">
+                            <div class="col-xl-12 col-6">
+                                <h2 class="title">Shop</h2>
+                            </div>
+                            <div class="col-6 text-right hide-show">
+                                <div id="show-sidebar">
+                                    <h5><i class="fas fa-bars"></i>Sidebar</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="shop-products-bottom">
+                        <div class="row no-gutters-sm">
+                            @foreach (var item in Model.ShopProducts)
+                            {
+                                var imageURL = string.IsNullOrEmpty(item.imageUrl) ? imageurl : item.imageUrl;
+                                <div class="col-md-4 col-6">
+                                    <div class="product-box">
+                                        <a class="box-product-img" href="@Url.Action("ProductDetails", "Shop", new { productId=item.productID})">
+                                            <img src="~/Content/images/products/@imageURL" alt="@item.productName">
+                                        </a>
+                                        <h5 class="product-category">@item.category.categoryName</h5>
+                                        <h3 class="product-name">@item.productName</h3>
+                                        <h3 class="product-price">£@item.sellPrice</h3>
+                                        @if (item.quantity > 0)
+                                        {
+                                            <h3 class="product-instock">@item.quantity Available</h3>
+                                            <div class="product-hover">
+                                                @using (Html.BeginForm("AddInCart", "Shop", new { qty = 1, productId = item.productID }, FormMethod.Post))
+                                                {
+                                                    <button class="product-cart round-icon-btn">
+                                                        <i class="fas fa-cart-plus"></i>
+                                                    </button>
+                                                }
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <h3 class="product-instock">Not Available</h3>
+                                        }
+                                    </div>
+                                </div>
+                            }
+
+
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $(".filterLink").click(function () {
+        var url = $(this).attr("data-href");
+
+        if (url != "" || url != undefined) {
+            GetData(url);
+        }
+    });
+</script>
+

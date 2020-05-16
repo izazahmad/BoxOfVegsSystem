@@ -1,0 +1,23 @@
+﻿@model userDetail
+@{
+    ViewBag.Title = "Invoice";
+
+}
+
+<!-- breadcrumb-->
+    <div class="bov-breadcrumb">
+        <div class="container">
+            <ul>
+                <li><a class="breadcrumb-link"><i class="fa fa-store"></i> Invoice</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="container">
+        @Html.ActionLink("Print Invoice", "PrintInvoice", new { userid = Model.userDetailID }, new { @class = "square-btn smooth",target = "_blank" })
+
+    </div>
+<div id="Invoice">
+    @{
+        Html.RenderAction("CreateInvoice");
+    }
+</div>

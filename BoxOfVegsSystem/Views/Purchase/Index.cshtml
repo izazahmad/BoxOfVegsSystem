@@ -1,0 +1,134 @@
+﻿@model PurchaseListViewModel
+@{
+    ViewBag.Title = "Purchases";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- breadcrumb-->
+<div class="bov-breadcrumb admin">
+    <ul>
+        <li><a class="breadcrumb-link"><i class="far fa-file"></i> Purchases</a></li>
+
+    </ul>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header align-middle">
+        <p><i class="fas fa-table"></i> Purchase Detail</p>
+        <button class="square-btn black admin-table right" type="button" onclick="location.href='@Url.Action("PurchaseProducts","Purchase")'">Do Purchase</button>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table" id="datatable">
+                <thead>
+                    <tr>
+                        <th scope="col">No.</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Purchase Date</th>
+                        <th scope="col">Unit Price(£)</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    @foreach (var item in Model.purchases)
+                    {
+                        
+                        
+
+                        <tr>
+                            <td scope="row">@(Model.purchases.IndexOf(item) + 1)</td>
+                            <td scope="row">@item.product.productName</td>
+                            <td scope="row">@item.purchase.purchaseDate</td>
+                            <td scope="row">@item.purchasedPrice</td>
+                            <td scope="row">@item.quantity</td>
+                            <td scope="row">@(item.quantity*item.purchasedPrice)</td>
+                            <td scope="row">
+                                <div class="table-action">
+                                    <button type="button" data-id="@item.purchasedProductID" class="square-btn red admin-table deleteBtn">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $(".deleteBtn").click(function () {
+        const swalWithBtn = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonStyling:false
+        })
+        swalWithBtn.fire({
+            title: 'Are You Sure, You Want To Delete?',
+            text: "It will decresed quantity of the product as well",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: 'No',
+            reverseButtons:true
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Delete","Purchase")',
+                data: {
+                    purchasedID: $(this).attr('data-id')
+                }
+
+            })
+                    .done(function (response) {
+                        if (response.message == "yes") {
+                            swalWithBtn.fire({
+                                title: 'Deleted!',
+                                text: 'Purchase Deleted Successfully',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.value) {
+                                    location.reload(true);
+                                }
+                            })
+                        }
+                        else {
+                            swalWithBtn.fire({
+                            title:'Not Deleted!',
+                            text: 'There is not enough quantity of the product',
+                            icon: 'fail',
+                            confirmButtonText:'OK'
+                        }).then((result) => {
+                            if (result.value) {
+                                location.reload(true);
+                            }
+                        })
+                        }
+                        
+
+
+                    })
+                .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("FAIL");
+                })
+
+            } else if (result.dismiss === swal.DismissReason.cancel) {
+                swalWithBtn.fire(
+                    'cancelled',
+                    'Category has not been deleted',
+                    'error'
+                )
+            }
+
+        })
+
+    });
+</script>
+

@@ -1,0 +1,129 @@
+﻿
+@{
+    ViewBag.Title = "Cart";
+    var imageurl = "default-placeholder-image.png";
+}
+
+<!-- breadcrumb-->
+<div class="bov-breadcrumb">
+    <div class="container">
+        <ul>
+            <li><a class="breadcrumb-link" href="@Url.Action("Index", "Home")"><i class="fas fa-home"></i> Home</a></li>
+            <li><a class="breadcrumb-link" href="@Url.Action("Index", "Shop")"><i class="fa fa-store"></i> Shop</a></li>
+            <li><a class="breadcrumb-link"><i class="fa fa-shopping-cart"></i> Shopping Cart</a></li>
+        </ul>
+    </div>
+</div>
+<!-- Shopping Cart -->
+<section id="shop-cart">
+    <div class="container">
+        @using (Html.BeginForm("UpdateCart", "Shop", FormMethod.Post))
+        {
+            <div class="row">
+
+                <div class="col-12">
+                    <div class="cart-table">
+                        <table class="table table-responsive">
+                            <colgroup>
+                                <col span="1" style="width: 30%">
+                                <col span="1" style="width: 15%">
+                                <col span="1" style="width: 15%">
+                                <col span="1" style="width: 15%">
+                                <col span="1" style="width: 15%">
+                                <col span="1" style="width: 15%">
+                                <col span="1" style="width: 10%">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="product-image" scope="col">Image</th>
+                                    <th class="product-name" scope="col">Product Name</th>
+                                    <th class="product-price" scope="col">Price</th>
+                                    <th class="product-price" scope="col">Discount</th>
+                                    <th class="product-quantity" scope="col">Quantity</th>
+                                    <th class="product-total" scope="col">Total</th>
+                                    <th class="product-clear" scope="col"><button disabled class="square-btn"><i class="fas fa-times"></i></button></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Session["cart"] == null || ((List<CartViewModel>)Session["cart"]).Count == 0)
+                                {
+                                    <tr><td colspan="5" >Cart Is Empty</td></tr>
+                                }
+                                else
+                                {
+                                    foreach (var item in (List<CartViewModel>)Session["cart"])
+                                    {
+                                        var imageURL = string.IsNullOrEmpty(item.ProductURL) ? imageurl : item.ProductURL;
+
+                            <tr>
+                                <td class="product-image">
+                                    <div class="img-wrapper">
+                                        <img src="~/Content/images/products/@imageURL" alt="@item.ProductName">
+                                    </div>
+                                </td>
+                                <td class="product-name"> @item.ProductName</td>
+                                <td class="product-price">£@item.Price</td>
+                                <td class="product-price">@item.discount%</td>
+                                <td class="product-quantity">
+                                    <input class="quantity square-input" type="number" min="1" max="@item.TotalQuantity" value="@item.Quanity" name="qty">
+                                </td>
+                                <td class="product-total">£@item.Subtotal</td>
+                                <td class="product-clear"><button class="square-btn" onclick='window.location.href = "@Url.Action("DeleteFromCart", "Shop", new { productId = item.ProductID })"'><i class="fas fa-times"></i></button></td>
+                            </tr>
+                                    }
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-12">
+                    <div class="back-to-shop">
+                        <a class="square-btn smooth" href ="@Url.Action("Index", "Shop")">Back To Shop</a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-12 text-right">
+                    <button class="square-btn black cart-update right" type="submit">Update Cart</button>
+                </div>
+
+            </div>
+        }
+        <div class="row justify-content-end">
+            <div class="col-lg-4 col-md-6 col-12">
+                <div class="cart-total-block">
+                    <h2>Cart Total</h2>
+                    <table class="table">
+                        <colgroup>
+                            <col span="1" style="width: 50%">
+                            <col span="1" style="width: 50%">
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <th>SUBTOTAL</th>
+                                <td>£@Session["total"]</td>
+                            </tr>
+                            <tr>
+                                <th>SHIPPING</th>
+                                <td>
+                                    <p>Free Shipping</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>TOTAL</th>
+                                <td>£@Session["total"]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    @if (Session["cart"] != null)
+                    {
+                        <div class="checkout">
+                            <button class="normal-btn" onclick='window.location.href = "@Url.Action("Checkout", "Shop")"'>Proceed to Checkout</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

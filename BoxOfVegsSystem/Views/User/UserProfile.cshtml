@@ -1,0 +1,50 @@
+﻿@using Microsoft.AspNet.Identity
+@model userDetail
+@{
+    ViewBag.Title = "Profile";
+}
+
+<section class="login-account" id="loginForm">
+    <div class="container">
+        <div class="row">
+            <div class="mx-auto col-md-6 col-12">
+                <h1 class="title">Welcome @Model.firstName</h1>
+                @using (Html.BeginForm("UserProfile", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.userDetailID)
+                    @Html.HiddenFor(m => m.userID)
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <label>User Name: @User.Identity.GetUserName()</label>
+                    <hr />
+                    <label>First Name</label>
+                    @Html.TextBoxFor(m => m.firstName, new { @class = "square-input" })
+                    @Html.ValidationMessageFor(model => model.firstName, "", new { @class = "text-danger" })
+                    <label>First Name</label>
+                    @Html.TextBoxFor(m => m.lastName, new { @class = "square-input" })
+                    @Html.ValidationMessageFor(model => model.lastName, "", new { @class = "text-danger" })
+                    <div class="account-function">
+                        <button class="square-btn" type="submit">Save Changes</button>
+                    </div>
+                }
+                <hr />
+
+
+
+                <div class="account-function">
+                    <a class="square-btn smooth left" href="@Url.Action("ResetPassword", "Account", new { id = User.Identity.GetUserId() })">Change Password</a>
+                    <hr />
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

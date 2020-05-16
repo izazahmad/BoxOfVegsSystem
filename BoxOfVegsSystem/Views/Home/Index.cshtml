@@ -1,0 +1,154 @@
+﻿@model HomeViewModels
+@{
+    ViewBag.Title = "Home Page";
+    var imageurl = "default-placeholder-image.png";
+}
+
+<!-- Categories Slider -->
+<section id="bov-slider">
+    <div class="bov-slider-wrapper">
+        <div id="bov-slide-carousel" class="bov-slider-block owl-carousel owl-theme">
+            @foreach (var item in Model.CategoriesList)
+            {
+                var imageURL = string.IsNullOrEmpty(item.imageUrl) ? imageurl : item.imageUrl;
+                <!-- slides-->
+                <div class="bov-slider-content">
+                    <div class="container">
+                        <div class="row d-flex align-items-center text-center">
+                            <div class="col-md-6 col-12">
+                                <div class="bov-slider-text animated zoomIn">
+                                    <h1 class="title">@item.categoryName</h1>
+                                    <div id="normal-btn-block">
+                                        <a class="btn btn-lg normal-btn" role="button" title="Shop Now" href="@Url.Action("Index", "Shop", new { categoryId = item.categoryID })">Shop Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="img-block animated zoomIn">
+                                    <a href="~/Content/images/categories/@imageURL">
+                                        <img class="slide-img" src="~/Content/images/categories/@imageURL" alt="@item.categoryName-Categories">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+        </div>
+    </div>
+</section>
+<!-- fruits and vegetables boxes -->
+<section id="bov-boxes">
+    <div class="bov-box-products">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center animated fadeInUp wow" data-wow-duration="1s" data-wow-delay=".5s">
+                    <h1 class="title mx-auto">Vegetables & fruites Boxes</h1>
+                </div>
+                <div class="col-12">
+                    <div id="box-tab">
+                       
+                            <div class="tab-content">
+                                <div id="tab-1" class="tab-pane active" role="tabpanel" aria-labelledby="tab1">
+
+                                    <div class="row no-gutters-sm">
+                                        @foreach (var product in Model.BoxProductsList)
+                                        {
+                                            var imageURL = string.IsNullOrEmpty(product.imageUrl) ? imageurl : product.imageUrl;
+                                            <div class="col-lg-3 col-md-4 col-6">
+                                                <div class="product-box animated zoomIn wow" data-wow-duration="1s" data-wow-delay=".5s">
+                                                    <a class="box-product-img" href="@Url.Action("ProductDetails", "Shop", new { productId=product.productID})">
+                                                        <img src="~/Content/images/products/@imageURL" alt="Fruite Box">
+                                                    </a>
+                                                    <h5 class="product-category">@product.category.categoryName</h5>
+                                                    <h3 class="product-name">@product.productName</h3>
+                                                    <h3 class="product-price">£@product.sellPrice</h3>
+                                                    @if (product.quantity > 0)
+                                                    {
+                                                        <h3 class="product-instock">@product.quantity Available</h3>
+                                                        <div class="product-hover">
+                                                            @using (Html.BeginForm("AddInCart", "Shop", new { qty = 1, productId = product.productID }, FormMethod.Post))
+                                                            {
+                                                                <button class="product-cart round-icon-btn">
+                                                                    <i class="fas fa-cart-plus"></i>
+                                                                </button>
+                                                            }
+
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <h3 class="product-instock">Not Available</h3>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+
+
+                                    </div>
+                                </div>
+                               
+                              
+                            </div>
+                        @*}*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Newly Added Products-->
+<section id="new-added">
+    <div id="new-products">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center animated fadeInUp wow" data-wow-duration="1s" data-wow-delay=".5s">
+                    <h1 class="title mx-auto">Discount</h1>
+                </div>
+                <div class="col-12">
+                    <div class="data-content">
+                        <div class="row no-gutters-sm">
+                            @foreach (var item in Model.ProductsDiscountList)
+                            {
+                                var imageURL = string.IsNullOrEmpty(item.imageUrl) ? imageurl : item.imageUrl;
+                                <div class="col-lg-3 col-md-4 col-6">
+                                    <div class="product-box animated zoomIn wow" data-wow-duration="1s" data-wow-delay=".5s">
+                                        <a class="box-product-img" href="@Url.Action("ProductDetails", "Shop", new { productId=item.productID})">
+                                            <img src="~/Content/images/products/@imageURL" alt="@item.productName">
+                                        </a>
+                                        <h5 class="product-category">@item.category.categoryName</h5>
+                                        <h3 class="product-name">@item.productName</h3>
+                                        <h3 class="product-price">@item.discount%</h3>
+                                        <h3 class="product-price">£@item.sellPrice</h3>
+                                        @if (item.quantity > 0)
+                                        {
+                                            <h3 class="product-instock">@item.quantity Available</h3>
+                                            <div class="product-hover">
+                                                @using (Html.BeginForm("AddInCart", "Shop", new { qty = 1, productId = item.productID }, FormMethod.Post))
+                                                {
+                                                    <button class="product-cart round-icon-btn">
+                                                        <i class="fas fa-cart-plus"></i>
+                                                    </button>
+                                                }
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <h3 class="product-instock">Not Available</h3>
+                                        }
+
+                                    </div>
+                                </div>
+                            }
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

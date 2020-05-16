@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewBag.Title = "Checkout";
+}
+
+<!-- breadcrumb-->
+    <div class="bov-breadcrumb">
+        <div class="container">
+            <ul>
+                <li><a class="breadcrumb-link" href="@Url.Action("Index", "Home")"><i class="fas fa-home"></i> Home</a></li>
+                <li><a class="breadcrumb-link" href="@Url.Action("Index", "Shop")"><i class="fa fa-store"></i> Shop</a></li>
+                <li><a class="breadcrumb-link" href="@Url.Action("Cart", "Shop")"><i class="fa fa-shopping-cart"></i> Shopping Cart</a></li>
+                <li><a class="breadcrumb-link">Checkout</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- Shop Checkout -->
+    <section id="shop-checkout">
+        <div class="container">
+            <form action="" method="post">
+                <div class="row">
+                    <div class="col-lg-8 col-12">
+                        <h2 class="form-title">Shipping Address</h2>
+
+                        <div class="form-group">
+                            <label for="inputCountry">Country</label>
+                            <input class="square-input-bg" id="inputCountry" type="text" required value="United Kingdom" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputCity">Town / City</label>
+                            <input class="square-input-bg" id="inputCity" type="text" required value="Leicester" name="city" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputStreet">Street Address*</label>
+                            <input class="square-input-bg" id="inputStreet" type="text" required name="street">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputZip">Postcode</label>
+                            <input class="square-input-bg" id="inputZip" type="text" required name="postCode">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputPhone">Phone*</label>
+                            <input class="square-input-bg" id="inputPhone" type="tel" required pattern="[0-9]{11}" name="phone">
+                            <span>Format: 07123456789</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <h2 class="form-title">Your Order</h2>
+                        <div class="shopping-cart">
+                            <div class="cart-total">
+                                <table class="table">
+                                    <colgroup>
+                                        <col span="1" style="width: 50%">
+                                        <col span="1" style="width: 50%">
+                                    </colgroup>
+                                    <tbody>
+                                        @if (Session["cart"] != null)
+                                        {
+
+                                            foreach (var item in (List<CartViewModel>)Session["cart"])
+                                            {
+                                                <tr>
+                                                    <th class="name">@item.ProductName × <span>@item.Quanity</span></th>
+                                                    <td class="price black">£@item.Subtotal</td>
+                                                </tr>
+                                            }
+                                        }
+                                        <tr>
+                                            <th>Subtotal</th>
+                                            <td class="price">£@Session["total"]</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Shipping</th>
+                                            <td>
+                                                <p>Free shipping</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Total</th>
+                                            <td class="total">£@Session["total"]</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            @using (Html.BeginForm())
+                            {
+                                <button class="normal-btn submit-btn" type="submit">Place order</button>
+                            }
+                            </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+

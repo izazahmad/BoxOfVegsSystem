@@ -1,0 +1,69 @@
+﻿@model PurchaseProductViewModel
+@{
+    ViewBag.Title = "PurchaseProducts";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- breadcrumb-->
+<div class="bov-breadcrumb admin">
+    <ul>
+        <li><a class="breadcrumb-link" href="@Url.Action("Index","Purchase")"><i class="far fa-file"></i> Purchases</a></li>
+        
+            <li><a class="breadcrumb-link"><i class="fas fa-cart-plus"></i> Purchase</a></li>
+        
+
+    </ul>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header align-middle">
+       
+            <p class="breadcrumb-link"><i class="fas fa-cart-plus"></i> Purchase Product</p>
+      
+    </div>
+    <div class="card-body">
+        <!-- Insert form -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 col-12">
+                    @using (Html.BeginForm("PurchaseProducts", "Purchase", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <label>Select Supplier</label>
+                        <select class="square-input" name="supplierID">
+                            <option value="none">--Select--</option>
+                            @foreach (var supplier in Model.Suppliers)
+                            {
+                                var selected = supplier.supplierID == Model.SupplierID ? "selected" : string.Empty;
+                                <option value="@supplier.supplierID" @selected>@supplier.companyName</option>
+                            }
+                        </select>
+                        @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
+                        <label>Select Product</label>
+                        <select class="square-input" name="productID">
+                            <option value="none">--Select--</option>
+                            @foreach (var product in Model.Products)
+                            {
+                                var selected = product.productID == Model.ProductId ? "selected" : string.Empty;
+                                <option value="@product.productID" @selected>@product.productName</option>
+                            }
+                        </select>
+                        @Html.ValidationMessageFor(model => model.ProductId, "", new { @class = "text-danger" })
+                        <label>PurchasedPrice</label>
+                        @Html.EditorFor(model => model.PurchasePrice, new { htmlAttributes = new { @class = "square-input" } })
+                        @Html.ValidationMessageFor(model => model.PurchasePrice, "", new { @class = "text-danger" })
+                        <label>Quantity</label>
+                        @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "square-input" } })
+                        @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+                        <div class="account-function text-left">
+                            <button class="square-btn black admin" type="submit">Save</button>
+                            <button class="square-btn red admin" type="button" onclick="location.href='@Url.Action("Index","Purchase")'">Cancel</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

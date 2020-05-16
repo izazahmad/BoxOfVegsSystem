@@ -1,0 +1,83 @@
+﻿@model List<OrdersVeiwModel>
+@{
+    ViewBag.Title = "Order History";
+    var imageurl = "default-placeholder-image.png";
+}
+
+<!-- breadcrumb-->
+<div class="bov-breadcrumb">
+    <div class="container">
+        <ul>
+            <li><a class="breadcrumb-link"><i class="fas fa-history"></i> Order History</a></li>
+        </ul>
+    </div>
+</div>
+<!-- Shopping Cart -->
+<section id="shop-cart">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-12">
+                <div class="cart-table">
+                    <table class="table table-responsive">
+                        <colgroup>
+                            <col span="1" style="width: 5%">
+                            <col span="1" style="width: 30%">
+                            <col span="1" style="width: 15%">
+                            <col span="1" style="width: 15%">
+                            <col span="1" style="width: 15%">
+                            <col span="1" style="width: 15%">
+                            <col span="1" style="width: 5%">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="product-name" scope="col">Order ID</th>
+                                <th class="product-image" scope="col">Image</th>
+                                <th class="product-name" scope="col">Product Name</th>
+                                <th class="product-price" scope="col">Price</th>
+                                <th class="product-price" scope="col">Discount</th>
+                                <th class="product-quantity" scope="col">Quantity</th>
+                                <th class="product-total" scope="col">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model == null)
+                            {
+                                <tr><td colspan="5">No History</td></tr>
+                            }
+                            else
+                            {
+                                foreach (var item in Model)
+                                {
+                                    var imageURL = string.IsNullOrEmpty(item.image) ? imageurl : item.image;
+
+                        <tr>
+                            <td class="product-name"> @item.OrderID</td>
+                            <td class="product-image">
+                                <div class="img-wrapper">
+                                    <img src="~/Content/images/products/@imageURL" alt="@item.ProductName">
+                                </div>
+                            </td>
+                            <td class="product-name"> @item.ProductName</td>
+                            <td class="product-price">£@item.UnitPrice</td>
+                            <td class="product-price">@item.discount%</td>
+                            <td class="product-quantity">
+                                <input class="quantity square-input" type="number" value="@item.Quantity" name="qty" disabled>
+                            </td>
+                            <td class="product-total">£@item.Subtotal</td>
+                        </tr>
+                                }
+                            }
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+

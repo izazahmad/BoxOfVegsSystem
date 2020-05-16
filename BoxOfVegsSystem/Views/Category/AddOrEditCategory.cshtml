@@ -1,0 +1,77 @@
+﻿@model category
+@{
+    ViewBag.Title = "InsertCategory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var imageurl = "../Content/images/default-placeholder-image.png";
+    
+    if (!string.IsNullOrEmpty(Model.imageUrl) && Model != null)
+    {
+        imageurl = "../Content/images/categories/" + Model.imageUrl;
+    }
+}
+
+<!-- breadcrumb-->
+<div class="bov-breadcrumb admin">
+    <ul>
+        <li><a class="breadcrumb-link" href="@Url.Action("Index","Category")"><i class="far fa-file"></i> Categories</a></li>
+        @if (Model.categoryID > 0)
+        {
+            <li><a class="breadcrumb-link"><i class="fas fa-edit"></i> Edit</a></li>
+        }
+        else
+        {
+            <li><a class="breadcrumb-link"><i class="fas fa-plus-square"></i> Insert</a></li>
+        }
+
+    </ul>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header align-middle">
+        @if (Model.categoryID > 0)
+        {
+            <p class="breadcrumb-link"><i class="fas fa-edit"></i> Edit Category</p>
+        }
+        else
+        {
+            <p class="breadcrumb-link"><i class="fas fa-plus-square"></i> Insert Category</p>
+        }
+    </div>
+    <div class="card-body">
+        <!-- Insert form -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 col-12">
+                    @using (Html.BeginForm("AddOrEditCategory", "Category", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.categoryID)
+                        @Html.HiddenFor(model => model.imageUrl)
+                        <label for="user-name">Name</label>
+                        @Html.EditorFor(model => model.categoryName, new { htmlAttributes = new { @class = "square-input" } })
+                        @Html.ValidationMessageFor(model => model.categoryName, "", new { @class = "text-danger" })
+                        <label for="description">Description</label>
+                        @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "square-input" } })
+                        @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
+                        <label for="image">Image</label>
+                        <input class="square-input file" name="image" id="image" type="file" accept=".png, .jpg, .jpeg" onchange="onchangeUrl(this);">
+                        <div class="account-function text-left">
+                            <button class="square-btn black admin" type="submit">Save</button>
+                            <button class="square-btn red admin" type="button" onclick="location.href='@Url.Action("Index","Category")'">Cancel</button>
+                        </div>
+                    }
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="image-block">
+                        <div class="image-wrapper">
+                            <img id="image-prev" class="slide-img side" src="@imageurl">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

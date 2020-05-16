@@ -1,0 +1,98 @@
+﻿@model AddOrEditProductViewModel
+
+@{
+    ViewBag.Title = "AddOrEditProduct";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var imageurl = "../Content/images/default-placeholder-image.png";
+
+    if (!string.IsNullOrEmpty(Model.imageUrl) && Model != null)
+    {
+        imageurl = "../Content/images/products/" + Model.imageUrl;
+    }
+}
+<!-- breadcrumb-->
+<div class="bov-breadcrumb admin">
+    <ul>
+        <li><a class="breadcrumb-link" href="@Url.Action("Index","Product")"><i class="far fa-file"></i> products</a></li>
+        @if (Model.ProductId > 0)
+        {
+            <li><a class="breadcrumb-link"><i class="fas fa-edit"></i> Edit</a></li>
+        }
+        else
+        {
+            <li><a class="breadcrumb-link"><i class="fas fa-plus-square"></i> Insert</a></li>
+        }
+
+    </ul>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header align-middle">
+        @if (Model.ProductId > 0)
+        {
+            <p class="breadcrumb-link"><i class="fas fa-edit"></i> Edit Product</p>
+        }
+        else
+        {
+            <p class="breadcrumb-link"><i class="fas fa-plus-square"></i> Insert Product</p>
+        }
+    </div>
+    <div class="card-body">
+        <!-- Insert form -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 col-12">
+                    @using (Html.BeginForm("AddOrEditProduct", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.ProductId)
+                        @Html.HiddenFor(model => model.imageUrl)
+                        <label>Select Category</label>
+                        <select class="square-input" name="categoryID">
+                            <option value="none">--Select--</option>
+                            @foreach (var category in Model.AllCategories)
+                            {
+                                var selected = category.categoryID == Model.categoryId ? "selected" : string.Empty;
+                                <option value="@category.categoryID" @selected>@category.categoryName</option>
+                            }
+                        </select>
+                        @Html.ValidationMessageFor(model => model.categoryId, "", new { @class = "text-danger" })
+                        <label>Name</label>
+                        @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "square-input" } })
+                        @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+                        <label>Description</label>
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "square-input" } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        <label>Image</label>
+                        <input class="square-input file" name="image" id="image" type="file" accept=".png, .jpg, .jpeg" onchange="onchangeUrl(this);">
+                        <label>PurchasedPrice</label>
+                        @Html.EditorFor(model => model.purchasedPrice, new { htmlAttributes = new { @class = "square-input", @disabled = "disabled", @id = "purchasedPrice" } })
+
+                        <label>Profit(%)</label>
+                        @Html.EditorFor(model => model.profit, new { htmlAttributes = new { @class = "square-input", @disabled = "disabled", @id = "profit" } })
+                        <label>Discount(%)</label>
+                        @Html.EditorFor(model => model.discount, new { htmlAttributes = new { @class = "square-input", @disabled = "disabled", @id = "discount" } })
+
+
+                        <label>Final Selling Price</label>
+                        @Html.EditorFor(model => model.sellPrice, new { htmlAttributes = new { @class = "square-input", @disabled = "disabled", @id = "finalPrice" } })
+                        <label>Quantity</label>
+                        @Html.EditorFor(model => model.quantity, new { htmlAttributes = new { @class = "square-input", @disabled = "disabled" } })
+                        <div class="account-function text-left">
+                            <button class="square-btn black admin" type="submit">Save</button>
+                            <button class="square-btn red admin" type="button" onclick="location.href='@Url.Action("Index","Product")'">Cancel</button>
+                        </div>
+                    }
+                </div>
+                        <div class="col-md-6 col-12">
+                            <div class="image-block">
+                                <div class="image-wrapper">
+                                    <img id="image-prev" class="slide-img side" src="@imageurl">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        </div>
+    </div>
+</div>

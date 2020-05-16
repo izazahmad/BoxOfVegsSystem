@@ -1,0 +1,228 @@
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tag -->
+    <meta charset="UTF-8">
+    <meta name="description" content="vegetable, fruits and boxes of vegetables and fruits selling">
+    <meta name="keywords" content="HTML5, CSS3, javaScript, jQuery, Bootstrap4, Web Design, Web Development, Responsive Website, shop, shopping, groceries">
+    <meta name="author" content="Izaz Shaikh">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="veiwport" content="width=device-width, initial-scale=1.0">
+    <!-- Title -->
+    <title>Box of vegetables</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="~/Content/images/favicon.png" />
+    <!--Bootstrap Css-->
+    <link rel="stylesheet" href="~/Content/css/bootstrap/bootstrap.min.css" />
+    <!-- Animate.css for animations -->
+    <link rel="stylesheet" href="~/Content/css/animate/animate.min.css" />
+    <!-- Fontawsome Vector Icons-->
+    <link rel="stylesheet" href="~/Content/css/font-awesome/css/all.min.css" />
+    <!-- owl carousel -->
+    <link rel="stylesheet" href="~/Content/css/owl_carousel/owl.carousel.min.css" />
+    <link rel="stylesheet" href="~/Content/css/owl_carousel/owl.theme.default.min.css" />
+    <!-- Maginfic popup -->
+    <link rel="stylesheet" href="~/Content/css/magnific-popup/magnific-popup.css" />
+    <!--RateYo plugin for star rating -->
+    <link rel="stylesheet" href="~/Content/css/rate-yo/jquery.rateyo.min.css" />
+    <!-- boxofvegs css -->
+    <link rel="stylesheet" href="~/Content/css/boxofvegs.css" />
+    <!--jQuery Bundle-->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+
+<body>
+    <header>
+        <!-- Navigation -->
+        <nav id="bov-usr-nav" class="navbar navbar-expand-xl fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">
+                    <img class="logo" src="../Content/images/logo.png" alt="logo">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#boxofvegs-menu" aria-controls="boxofvegs-menu" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon d-flex align-items-center">
+                        <i class="fas fa-bars"></i>
+                    </span>
+                </button>
+                <div class="collapse navbar-collapse nav-top-center" id="boxofvegs-menu">
+                    <ul class="navbar-nav nav-content-center">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="@Url.Action("Index", "Home")"><i class="fas fa-home"></i> Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "Shop")">
+                                <i class="fa fa-store"></i> Shop
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            @using (Html.BeginForm("Index", "Shop", FormMethod.Post,new { @class="form-inline"}))
+                            {
+                                <input class="search-txt form-control" placeholder="Search" name="search">
+                                <button class="nav-link search-btn" type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            }
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <div class="dropdown">
+                                @if (Request.IsAuthenticated)
+                                {
+                                    <a class="nav-link" href="#">
+                                        <i class="fa fa-user"></i> Hello
+                                    </a>
+                                    <ul class="dropdown-items">
+                                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                                        {
+                                              @Html.AntiForgeryToken()
+                                              if (User.IsInRole("admin"))
+                                              {
+                                                  <li><a class="dropdown-lnk" href="@Url.Action("Index","Category")">Admin Panel</a></li>
+                                              }
+                                             
+                                              <li><a class="dropdown-lnk" href="@Url.Action("UserProfile","User")">Profile</a></li>
+                                              <li><a class="dropdown-lnk" href="@Url.Action("YourOrder", "User")">Order History</a></li>
+                                              <li>
+                                                  <div class="dropdown-divider"></div>
+                                              </li>
+                                              <li><a class="text-danger" href="javascript:document.getElementById('logoutForm').submit()">Logout</a></li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <a class="nav-link" href="@Url.Action("Login", "Account")">
+                                        <i class="fa fa-user"></i> User
+                                    </a>
+                                    <ul class="dropdown-items">
+                                        <li><a class="dropdown-lnk" href="@Url.Action("Login", "Account")">Login</a></li>
+                                        <li><a class="dropdown-lnk" href="register.html">Register</a></li>
+                                        
+                                    </ul>
+                                }
+
+                            </div>
+                        </li>
+                        <li class="nav-item">
+
+                            <div class="dropdown">
+                                <a class="nav-link" href="@Url.Action("Cart", "Shop")">
+                                    <i class="fa fa-shopping-cart"></i> Cart
+                                </a>
+                                <ul class="dropdown-items">
+                                    @if (Session["cart"] != null && ((List<CartViewModel>)Session["cart"]).Count != 0)
+                                    {
+                                        foreach (CartViewModel item in (List<CartViewModel>)Session["cart"])
+                                        {
+                                            <li><span>@item.ProductName (@item.Quanity)- £@item.Subtotal </span><a class="dropdown-lnk" href="@Url.Action("DeleteFromCart","Shop",new { productId=item.ProductID})"><i class="fas fa-times right"></i></a></li>
+                                        }
+                                        <li>
+                                            <div class="dropdown-divider"></div>
+                                        </li>
+                                        <li><a class="dropdown-lnk" href="@Url.Action("Cart", "Shop")">Total <span>£@Session["total"]</span></a></li>
+                                        <li>
+                                            <div class="dropdown-divider"></div>
+                                        </li>
+                                        <li><a class="dropdown-lnk" href="@Url.Action("Checkout", "Shop")">Checkout</a></li>
+                                    }
+                                </ul>
+
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    @RenderBody()
+    <!-- Footer -->
+    <footer>
+        <div class="boxofvegs-contact">
+            <div id="bov-footer-top">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div id="bov-contact-left">
+                                <a class="footer-logo" href="index.html">
+                                    <img class="logo" src="../Content/images/logo.png" alt="logo">
+                                </a>
+                                <div id="bov-contact-info">
+                                    <div id="phone-fax-email-contact">
+                                        <p>
+                                            <strong>Address: </strong>
+                                            <span>Leicester</span>
+                                        </p>
+                                        <p><strong>Phone: </strong><span>(44) 1245 56789</span></p>
+                                        <p>
+                                            <strong>Email: </strong><span>info@boxofvegs.com</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <ul class="bov-social-list">
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-youtube"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-instagram-square"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="bov-contact-right">
+                                <ul class="bov-contact-right-list">
+                                    <li><a href="index.html">Home</a></li>
+                                    <li><a href="shop.html">Shop</a></li>
+                                    <li><a href="shop_cart.html">Cart</a></li>
+                                    <li><a href="login.html">Login</a></li>
+                                    <li><a href="register.html">Register</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="bov-footer-bottom" class="text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="bov-copyright">
+                                <p>Copyrights &copy; 2020 All Right Reserved By BoxOfVegs Inc.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="" id="scroll-up" class="btn btn-sm go-up-btn smooth-scroll"><i class="fas fa-angle-double-up"></i></a>
+    </footer>
+    <!-- jQuery -->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @*<script src="~/Content/js/jquery-3.4.1.min.js"></script>*@
+    <!-- Bootstrap js-->
+    <script src="~/Content/js/bootstrap/bootstrap.min.js"></script>
+    <!-- owl carousel -->
+    <script src="~/Content/js/owl_carousel/owl.carousel.min.js"></script>
+    <!-- Wow- reveal animation on scroll -->
+    <script src="~/Content/js/wow/wow.min.js"></script>
+    <!-- easing- scroll -->
+    <script src="~/Content/js/easing/jquery.easing.1.3.js"></script>
+    <!-- Magnific popup -->
+    <script src="~/Content/js/magnific-popup/jquery.magnific-popup.min.js"></script>
+    <!-- rate yo for star -->
+    <script src="~/Content/js/rate-yo/jquery.rateyo.min.js"></script>
+    <!-- zoom jquery to enlarge image-->
+    <script src="~/Content/js/zoom/jquery.zoom.min.js"></script>
+    <!-- boxofvegs javascript-->
+    <script src="~/Content/js/boxofvegs.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+
+</html>
+
+

@@ -1,0 +1,109 @@
+﻿@model CategoryListViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- breadcrumb-->
+<div class="bov-breadcrumb admin">
+    <ul>
+        <li><a class="breadcrumb-link"><i class="far fa-file"></i> Categories</a></li>
+
+    </ul>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header align-middle">
+        <p><i class="fas fa-table"></i> Category Detail</p>
+        <button class="square-btn black admin-table right" type="button" onclick="location.href='@Url.Action("AddOrEditCategory","Category",new { categoryID=0 })'">Add New</button>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table" id="datatable">
+                <thead>
+                    <tr>
+                        <th scope="col">No.</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Products</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                      @foreach (var item in Model.categories)
+                        {
+                            <tr>
+                                <td scope="row">@(Model.categories.IndexOf(item) + 1)</td>
+                                <td scope="row">@item.categoryName</td>
+                                <td scope="row">@item.products.Count</td>
+                                <td scope="row">
+                                    <div class="table-action">
+                                        <button type="button" id="resetBtn" class="square-btn black admin-table" onclick="location.href='@Url.Action("AddOrEditCategory",new { categoryID= item.categoryID })'">Edit</button>
+                                        <button type="button" data-id="@item.categoryID" class="square-btn red admin-table deleteBtn">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $(".deleteBtn").click(function () {
+        const swalWithBtn = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonStyling:false
+        })
+        swalWithBtn.fire({
+            title: 'Are You Sure, You Want To Delete?',
+            text: "All Products which belong to Category Will be deleted as well",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: 'No',
+            reverseButtons:true
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Delete","Category")',
+                data: {
+                    CategoryID: $(this).attr('data-id')
+                }
+
+            })
+                    .done(function (response) {
+                        swalWithBtn.fire({
+                            title:'Deleted!',
+                            text: response.message,
+                            icon: 'success',
+                            confirmButtonText:'OK'
+                        }).then((result) => {
+                            if (result.value) {
+                                location.reload(true);
+                            }
+                        })
+                        
+                    
+                    })
+                .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("FAIL");
+                })
+
+            } else if (result.dismiss === swal.DismissReason.cancel) {
+                swalWithBtn.fire(
+                    'cancelled',
+                    'Category has not been deleted',
+                    'error'
+                )
+            }
+            
+        })
+       
+    });
+</script>

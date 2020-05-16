@@ -1,0 +1,383 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="boxofvegsDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="category">
+    <Key>
+      <PropertyRef Name="categoryID" />
+    </Key>
+    <Property Name="categoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="categoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="imageUrl" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="products" Relationship="boxofvegsDBModel.FK__products__catego__4D94879B" FromRole="category" ToRole="product" />
+  </EntityType>
+  <EntityType Name="purchasedProduct">
+    <Key>
+      <PropertyRef Name="purchasedProductID" />
+    </Key>
+    <Property Name="purchasedProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="purchaseID" Type="Int32" Nullable="false" />
+    <Property Name="productID" Type="Int32" Nullable="false" />
+    <Property Name="quantity" Type="Int32" Nullable="false" />
+    <Property Name="purchasedPrice" Type="Decimal" Precision="18" Scale="2" />
+    <NavigationProperty Name="purchase" Relationship="boxofvegsDBModel.FK__purchased__purch__04E4BC85" FromRole="purchasedProduct" ToRole="purchase" />
+    <NavigationProperty Name="product" Relationship="boxofvegsDBModel.FK__purchased__produ__05D8E0BE" FromRole="purchasedProduct" ToRole="product" />
+  </EntityType>
+  <EntityType Name="supplier">
+    <Key>
+      <PropertyRef Name="supplierID" />
+    </Key>
+    <Property Name="supplierID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="companyName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="contactPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="city" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="postCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PhoneNo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="email" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="purchases" Relationship="boxofvegsDBModel.FK__purchases__suppl__66603565" FromRole="supplier" ToRole="purchase" />
+  </EntityType>
+  <EntityContainer Name="boxofvegsDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="categories" EntityType="Self.category" />
+    <EntitySet Name="purchasedProducts" EntityType="Self.purchasedProduct" />
+    <EntitySet Name="suppliers" EntityType="Self.supplier" />
+    <EntitySet Name="C__MigrationHistory" EntityType="boxofvegsDBModel.C__MigrationHistory" />
+    <EntitySet Name="AspNetRoles" EntityType="boxofvegsDBModel.AspNetRole" />
+    <EntitySet Name="AspNetUserClaims" EntityType="boxofvegsDBModel.AspNetUserClaim" />
+    <EntitySet Name="AspNetUserLogins" EntityType="boxofvegsDBModel.AspNetUserLogin" />
+    <EntitySet Name="AspNetUsers" EntityType="boxofvegsDBModel.AspNetUser" />
+    <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="boxofvegsDBModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="boxofvegsDBModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
+    </AssociationSet>
+    <AssociationSet Name="AspNetUserRoles" Association="boxofvegsDBModel.AspNetUserRoles">
+      <End Role="AspNetRole" EntitySet="AspNetRoles" />
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+    </AssociationSet>
+    <EntitySet Name="purchases" EntityType="boxofvegsDBModel.purchase" />
+    <AssociationSet Name="FK__purchased__purch__04E4BC85" Association="boxofvegsDBModel.FK__purchased__purch__04E4BC85">
+      <End Role="purchase" EntitySet="purchases" />
+      <End Role="purchasedProduct" EntitySet="purchasedProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK__purchases__suppl__66603565" Association="boxofvegsDBModel.FK__purchases__suppl__66603565">
+      <End Role="supplier" EntitySet="suppliers" />
+      <End Role="purchase" EntitySet="purchases" />
+    </AssociationSet>
+    <EntitySet Name="userDetails" EntityType="boxofvegsDBModel.userDetail" />
+    <EntitySet Name="userReviews" EntityType="boxofvegsDBModel.userReview" />
+    <AssociationSet Name="FK__userRevie__userD__3B40CD36" Association="boxofvegsDBModel.FK__userRevie__userD__3B40CD36">
+      <End Role="userDetail" EntitySet="userDetails" />
+      <End Role="userReview" EntitySet="userReviews" />
+    </AssociationSet>
+    <EntitySet Name="invoices" EntityType="boxofvegsDBModel.invoice" />
+    <AssociationSet Name="FK__invoices__userDe__3E1D39E1" Association="boxofvegsDBModel.FK__invoices__userDe__3E1D39E1">
+      <End Role="userDetail" EntitySet="userDetails" />
+      <End Role="invoice" EntitySet="invoices" />
+    </AssociationSet>
+    <EntitySet Name="orders" EntityType="boxofvegsDBModel.order" />
+    <EntitySet Name="products" EntityType="boxofvegsDBModel.product" />
+    <AssociationSet Name="FK__products__catego__4D94879B" Association="boxofvegsDBModel.FK__products__catego__4D94879B">
+      <End Role="category" EntitySet="categories" />
+      <End Role="product" EntitySet="products" />
+    </AssociationSet>
+    <AssociationSet Name="FK__orders__invoiceI__40F9A68C" Association="boxofvegsDBModel.FK__orders__invoiceI__40F9A68C">
+      <End Role="invoice" EntitySet="invoices" />
+      <End Role="order" EntitySet="orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK__orders__productI__41EDCAC5" Association="boxofvegsDBModel.FK__orders__productI__41EDCAC5">
+      <End Role="product" EntitySet="products" />
+      <End Role="order" EntitySet="orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK__purchased__produ__05D8E0BE" Association="boxofvegsDBModel.FK__purchased__produ__05D8E0BE">
+      <End Role="product" EntitySet="products" />
+      <End Role="purchasedProduct" EntitySet="purchasedProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK__userRevie__produ__5FB337D6" Association="boxofvegsDBModel.FK__userRevie__produ__5FB337D6">
+      <End Role="product" EntitySet="products" />
+      <End Role="userReview" EntitySet="userReviews" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="C__MigrationHistory">
+    <Key>
+      <PropertyRef Name="MigrationId" />
+      <PropertyRef Name="ContextKey" />
+    </Key>
+    <Property Name="MigrationId" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="ContextKey" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="Model" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+    <Property Name="ProductVersion" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="AspNetRole">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUsers" Relationship="boxofvegsDBModel.AspNetUserRoles" FromRole="AspNetRole" ToRole="AspNetUser" />
+  </EntityType>
+  <EntityType Name="AspNetUserClaim">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUser" Relationship="boxofvegsDBModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaim" ToRole="AspNetUser" />
+  </EntityType>
+  <EntityType Name="AspNetUserLogin">
+    <Key>
+      <PropertyRef Name="LoginProvider" />
+      <PropertyRef Name="ProviderKey" />
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUser" Relationship="boxofvegsDBModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogin" ToRole="AspNetUser" />
+  </EntityType>
+  <EntityType Name="AspNetUser">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+    <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUserClaims" Relationship="boxofvegsDBModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
+    <NavigationProperty Name="AspNetUserLogins" Relationship="boxofvegsDBModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
+    <NavigationProperty Name="AspNetRoles" Relationship="boxofvegsDBModel.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
+  </EntityType>
+  <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+    <End Type="boxofvegsDBModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="boxofvegsDBModel.AspNetUserClaim" Role="AspNetUserClaim" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserClaim">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+    <End Type="boxofvegsDBModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="boxofvegsDBModel.AspNetUserLogin" Role="AspNetUserLogin" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserLogin">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="AspNetUserRoles">
+    <End Type="boxofvegsDBModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
+    <End Type="boxofvegsDBModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
+  </Association>
+  <EntityType Name="purchase">
+    <Key>
+      <PropertyRef Name="purchaseID" />
+    </Key>
+    <Property Name="purchaseID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="purchaseDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="supplierID" Type="Int32" Nullable="false" />
+    <Property Name="userID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="purchasedProducts" Relationship="boxofvegsDBModel.FK__purchased__purch__04E4BC85" FromRole="purchase" ToRole="purchasedProduct" />
+    <NavigationProperty Name="supplier" Relationship="boxofvegsDBModel.FK__purchases__suppl__66603565" FromRole="purchase" ToRole="supplier" />
+  </EntityType>
+  <Association Name="FK__purchased__purch__04E4BC85">
+    <End Type="boxofvegsDBModel.purchase" Role="purchase" Multiplicity="1" />
+    <End Type="boxofvegsDBModel.purchasedProduct" Role="purchasedProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="purchase">
+        <PropertyRef Name="purchaseID" />
+      </Principal>
+      <Dependent Role="purchasedProduct">
+        <PropertyRef Name="purchaseID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__purchases__suppl__66603565">
+    <End Type="boxofvegsDBModel.supplier" Role="supplier" Multiplicity="1" />
+    <End Type="boxofvegsDBModel.purchase" Role="purchase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="supplier">
+        <PropertyRef Name="supplierID" />
+      </Principal>
+      <Dependent Role="purchase">
+        <PropertyRef Name="supplierID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="userDetail">
+    <Key>
+      <PropertyRef Name="userDetailID" />
+    </Key>
+    <Property Name="userDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="firstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="userReviews" Relationship="boxofvegsDBModel.FK__userRevie__userD__3B40CD36" FromRole="userDetail" ToRole="userReview" />
+    <NavigationProperty Name="invoices" Relationship="boxofvegsDBModel.FK__invoices__userDe__3E1D39E1" FromRole="userDetail" ToRole="invoice" />
+  </EntityType>
+  <EntityType Name="userReview">
+    <Key>
+      <PropertyRef Name="userReviesID" />
+    </Key>
+    <Property Name="userReviesID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="review" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="rating" Type="Double" />
+    <Property Name="reviewDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="productID" Type="Int32" Nullable="false" />
+    <Property Name="userDetailID" Type="Int32" />
+    <NavigationProperty Name="userDetail" Relationship="boxofvegsDBModel.FK__userRevie__userD__3B40CD36" FromRole="userReview" ToRole="userDetail" />
+    <NavigationProperty Name="product" Relationship="boxofvegsDBModel.FK__userRevie__produ__5FB337D6" FromRole="userReview" ToRole="product" />
+  </EntityType>
+  <Association Name="FK__userRevie__userD__3B40CD36">
+    <End Type="boxofvegsDBModel.userDetail" Role="userDetail" Multiplicity="0..1" />
+    <End Type="boxofvegsDBModel.userReview" Role="userReview" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="userDetail">
+        <PropertyRef Name="userDetailID" />
+      </Principal>
+      <Dependent Role="userReview">
+        <PropertyRef Name="userDetailID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="invoice">
+    <Key>
+      <PropertyRef Name="invoiceID" />
+    </Key>
+    <Property Name="invoiceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userDetailID" Type="Int32" Nullable="false" />
+    <Property Name="date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="address" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="city" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="postCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNo" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="userDetail" Relationship="boxofvegsDBModel.FK__invoices__userDe__3E1D39E1" FromRole="invoice" ToRole="userDetail" />
+    <NavigationProperty Name="orders" Relationship="boxofvegsDBModel.FK__orders__invoiceI__40F9A68C" FromRole="invoice" ToRole="order" />
+  </EntityType>
+  <Association Name="FK__invoices__userDe__3E1D39E1">
+    <End Type="boxofvegsDBModel.userDetail" Role="userDetail" Multiplicity="1" />
+    <End Type="boxofvegsDBModel.invoice" Role="invoice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="userDetail">
+        <PropertyRef Name="userDetailID" />
+      </Principal>
+      <Dependent Role="invoice">
+        <PropertyRef Name="userDetailID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="order">
+    <Key>
+      <PropertyRef Name="orderID" />
+    </Key>
+    <Property Name="orderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="invoiceID" Type="Int32" Nullable="false" />
+    <Property Name="productID" Type="Int32" Nullable="false" />
+    <Property Name="quantity" Type="Int32" Nullable="false" />
+    <Property Name="soldUnitPrice" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="soldUnitDiscount" Type="Int32" />
+    <NavigationProperty Name="invoice" Relationship="boxofvegsDBModel.FK__orders__invoiceI__40F9A68C" FromRole="order" ToRole="invoice" />
+    <NavigationProperty Name="product" Relationship="boxofvegsDBModel.FK__orders__productI__41EDCAC5" FromRole="order" ToRole="product" />
+  </EntityType>
+  <EntityType Name="product">
+    <Key>
+      <PropertyRef Name="productID" />
+    </Key>
+    <Property Name="productID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="productName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="imageUrl" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="categoryID" Type="Int32" Nullable="false" />
+    <Property Name="purchasedPrice" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="profitPercentage" Type="Int32" />
+    <Property Name="discount" Type="Int32" />
+    <Property Name="sellPrice" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="quantity" Type="Int32" />
+    <NavigationProperty Name="category" Relationship="boxofvegsDBModel.FK__products__catego__4D94879B" FromRole="product" ToRole="category" />
+    <NavigationProperty Name="orders" Relationship="boxofvegsDBModel.FK__orders__productI__41EDCAC5" FromRole="product" ToRole="order" />
+    <NavigationProperty Name="purchasedProducts" Relationship="boxofvegsDBModel.FK__purchased__produ__05D8E0BE" FromRole="product" ToRole="purchasedProduct" />
+    <NavigationProperty Name="userReviews" Relationship="boxofvegsDBModel.FK__userRevie__produ__5FB337D6" FromRole="product" ToRole="userReview" />
+  </EntityType>
+  <Association Name="FK__products__catego__4D94879B">
+    <End Type="boxofvegsDBModel.category" Role="category" Multiplicity="1" />
+    <End Type="boxofvegsDBModel.product" Role="product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="category">
+        <PropertyRef Name="categoryID" />
+      </Principal>
+      <Dependent Role="product">
+        <PropertyRef Name="categoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__orders__invoiceI__40F9A68C">
+    <End Type="boxofvegsDBModel.invoice" Role="invoice" Multiplicity="1" />
+    <End Type="boxofvegsDBModel.order" Role="order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="invoice">
+        <PropertyRef Name="invoiceID" />
+      </Principal>
+      <Dependent Role="order">
+        <PropertyRef Name="invoiceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__orders__productI__41EDCAC5">
+    <End Type="boxofvegsDBModel.product" Role="product" Multiplicity="1" />
+    <End Type="boxofvegsDBModel.order" Role="order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="product">
+        <PropertyRef Name="productID" />
+      </Principal>
+      <Dependent Role="order">
+        <PropertyRef Name="productID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__purchased__produ__05D8E0BE">
+    <End Type="boxofvegsDBModel.product" Role="product" Multiplicity="1" />
+    <End Type="boxofvegsDBModel.purchasedProduct" Role="purchasedProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="product">
+        <PropertyRef Name="productID" />
+      </Principal>
+      <Dependent Role="purchasedProduct">
+        <PropertyRef Name="productID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__userRevie__produ__5FB337D6">
+    <End Type="boxofvegsDBModel.product" Role="product" Multiplicity="1" />
+    <End Type="boxofvegsDBModel.userReview" Role="userReview" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="product">
+        <PropertyRef Name="productID" />
+      </Principal>
+      <Dependent Role="userReview">
+        <PropertyRef Name="productID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

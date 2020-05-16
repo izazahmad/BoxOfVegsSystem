@@ -1,0 +1,159 @@
+﻿@model ProductDetailViewModels
+    @{
+        ViewBag.Title = "Details";
+        var imageurl = "default-placeholder-image.png";
+        var imageURL = string.IsNullOrEmpty(Model.Product.imageUrl) ? imageurl : Model.Product.imageUrl;
+
+    }
+    <!-- breadcrumb-->
+    <div class="bov-breadcrumb">
+        <div class="container">
+            <ul>
+                <li><a class="breadcrumb-link" href="@Url.Action("Index", "Home")"><i class="fas fa-home"></i> Home</a></li>
+                <li><a class="breadcrumb-link" href="@Url.Action("Index", "Shop")"><i class="fa fa-store"></i> Shop</a></li>
+                <li><a class="breadcrumb-link"> Product Detail</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- product Detail-->
+    <section id="product-detail">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-12">
+                    <div class="product-detail-img">
+                        <div class="img-block">
+                            <div class="product-img-block">
+                                <img src="../Content/images/products/@imageURL" alt="@Model.Product.productName">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-12">
+                    <div class="product-info">
+                        <h5 class="product-category color-type">@Model.Product.category.categoryName</h5>
+                        <h3 class="product-name">@Model.Product.productName</h3>
+                        <p class="product-description">
+                            @Model.Product.description
+                        </p>
+                        <div class="price-rate">
+                            <h3 class="product-price">£@Model.Product.sellPrice</h3>
+                            <div class="rating">
+                                <div id="avarageRating"></div>
+                                <div class="rating-count">
+                                    <span>(@Model.UserCount)</span>
+                                </div>
+                            </div>
+                        </div>
+                        @if (Model.Product.quantity > 0)
+                        {
+                            using (Html.BeginForm("AddInCart", "Shop", new { productId = Model.Product.productID }, FormMethod.Post))
+                            {
+                                <div class="product-quantity">
+                                    <label for="quantity">Quantity:</label>
+                                    <input class="square-input" id="quantity" type="number" min="1" max="@Model.Product.quantity" value="1" name="qty">
+                                </div>
+                                <div class="product-select">
+                                    <button class="add-to-cart normal-btn outline">Add to Cart</button>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <h3 class="product-instock">Not Available</h3>
+
+                        }
+
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="product-user-review">
+                        <div class="reviews-tab">
+                            <div class="review-top-block">
+                               
+                                <div class="review-top">
+                                    <h2>Customer Reviews</h2>
+                                    <span>(@Model.UserCount)</span>
+                                </div>
+                            </div>
+                            <div class="review-bottom">
+                                @{int i = 1; }
+                                @foreach (var item in Model.ReviewsList)
+                                {
+                                    <script>
+                                        $(function () {
+                                            $('#@("rating"+i)').rateYo({
+                                              rating: @item.rating,
+                                              starWidth:"15px",
+                                              readOnly: true
+                                            });
+                                        });
+                                    </script>
+                                    <div class="user-review-detail">
+                                        <h5 class="review-date">@item.reviewDate.ToShortDateString()</h5>
+                                        <h3 class="user-name">@item.userDetail.firstName</h3>
+                                        <div class="@("rating"+i)"></div>
+                                        <p class="user-comment">@item.review</p>
+                                    </div>
+                                    <hr />
+                                    i++;
+                                }
+
+                            <div class="add-review">
+                                @if (Request.IsAuthenticated)
+                                {
+                                    using (Html.BeginForm("AddReview", "Shop", FormMethod.Post))
+                                    {
+                                        @Html.HiddenFor(model => model.Product.productID);
+                                        <div class="add-review-top">
+                                            <h2>Add Review</h2>
+                                        </div>
+                                        <div class="add-rating">
+                                            <div class="rate-stars">
+                                                <h5>Your Rating:</h5>
+                                                <input type="hidden" id="rating" name="rating" />
+                                                <div id="rateYo"></div>
+                                            </div>
+                                            <div class="user-comment">
+                                                <textarea class="textarea-form" id="review" name="Review" cols="30" rows="4" placeholder="Message"></textarea>
+                                            </div>
+                                            <button class="normal-btn" type="submit">
+                                                Submit Review
+                                            </button>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("Login","Account")">Login For Rating and Add Review</a>
+                                }
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+    $(function () {
+        $("#rateYo").rateYo({
+            rating: 0,
+            numStars: 5,
+            maxValue: 5,
+            halfStar: true,
+            onChange: function (rating, rateYoInstance) {
+                $('#rating').val(rating);
+            }
+        });
+    });
+
+        $(function () {
+            $("#avarageRating").rateYo({
+                rating: @Model.AverageRating,
+                starWidth:"15px",
+                readOnly: true
+            });
+        });
+
+    </script>
+

@@ -1,0 +1,76 @@
+﻿@model supplier
+@{
+    ViewBag.Title = "AddOrEditSupplier";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- breadcrumb-->
+<div class="bov-breadcrumb admin">
+    <ul>
+        <li><a class="breadcrumb-link" href="@Url.Action("Index","Supplier")"><i class="far fa-file"></i> Supplier</a></li>
+        @if (Model.supplierID > 0)
+        {
+            <li><a class="breadcrumb-link"><i class="fas fa-edit"></i> Edit</a></li>
+        }
+        else
+        {
+            <li><a class="breadcrumb-link"><i class="fas fa-plus-square"></i> Insert</a></li>
+        }
+
+    </ul>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header align-middle">
+        @if (Model.supplierID > 0)
+        {
+            <p class="breadcrumb-link"><i class="fas fa-edit"></i> Edit Supplier</p>
+        }
+        else
+        {
+            <p class="breadcrumb-link"><i class="fas fa-plus-square"></i> Insert Supplier</p>
+        }
+    </div>
+    <div class="card-body">
+        <!-- Insert form -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 col-12">
+                    @using (Html.BeginForm("AddOrEditSupplier", "Supplier", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.supplierID)
+                        <label>Company Name</label>
+                        @Html.EditorFor(model => model.companyName, new { htmlAttributes = new { @class = "square-input" } })
+                        @Html.ValidationMessageFor(model => model.companyName, "", new { @class = "text-danger" })
+                        <label>Contact Person Name</label>
+                        @Html.EditorFor(model => model.contactPerson, new { htmlAttributes = new { @class = "square-input" } })
+                        @Html.ValidationMessageFor(model => model.contactPerson, "", new { @class = "text-danger" })
+                        <label>Address</label>
+                        @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "square-input" } })
+                        @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
+                        <label>City</label>
+                        @Html.EditorFor(model => model.city, new { htmlAttributes = new { @class = "square-input" } })
+                        @Html.ValidationMessageFor(model => model.city, "", new { @class = "text-danger" })
+                        <label>Post Code</label>
+                        @Html.EditorFor(model => model.postCode, new { htmlAttributes = new { @class = "square-input" } })
+                        @Html.ValidationMessageFor(model => model.postCode, "", new { @class = "text-danger" })
+                        <label>Phone No.</label>
+                        @Html.EditorFor(model => model.PhoneNo, new { htmlAttributes = new { @class = "square-input" } })
+                        @Html.ValidationMessageFor(model => model.PhoneNo, "", new { @class = "text-danger" })
+                        <label>Email</label>
+                        @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "square-input" } })
+                        @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+                        <div class="account-function text-left">
+                            <button class="square-btn black admin" type="submit">Save</button>
+                            <button class="square-btn red admin" type="button" onclick="location.href='@Url.Action("Index","Supplier")'">Cancel</button>
+                        </div>
+                    }
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
