@@ -79,7 +79,14 @@
                                         </a>
                                         <h5 class="product-category">@item.category.categoryName</h5>
                                         <h3 class="product-name">@item.productName</h3>
-                                        <h3 class="product-price">£@item.sellPrice</h3>
+                                        <h3 class="product-price">
+                                            £@item.sellPrice
+                                            @if (item.discount != null && item.discount != 0)
+                                            {
+                                                decimal wasprice = Convert.ToDecimal((Convert.ToDecimal(Convert.ToDecimal(item.profitPercentage) / 100) * Convert.ToDecimal(item.purchasedPrice)) + Convert.ToDecimal(item.purchasedPrice));
+                                                <del>£@wasprice.ToString("0.00") </del>
+                                            }
+                                        </h3>
                                         @if (item.quantity > 0)
                                         {
                                             <h3 class="product-instock">@item.quantity Available</h3>

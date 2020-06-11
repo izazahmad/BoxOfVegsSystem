@@ -83,7 +83,7 @@ namespace BoxOfVegsSystem.Controllers
             return View();
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult Delete(int purchasedID)
         {
             int val = deleteservice.DeletePurchase(purchasedID);

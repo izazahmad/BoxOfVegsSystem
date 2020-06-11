@@ -36,7 +36,14 @@
                             @Model.Product.description
                         </p>
                         <div class="price-rate">
-                            <h3 class="product-price">£@Model.Product.sellPrice</h3>
+                            <h3 class="product-price">
+                                @if (Model.Product.discount != null && Model.Product.discount != 0)
+                                {
+                                    decimal wasprice = Convert.ToDecimal((Convert.ToDecimal(Convert.ToDecimal(Model.Product.profitPercentage) / 100) * Convert.ToDecimal(Model.Product.purchasedPrice)) + Convert.ToDecimal(Model.Product.purchasedPrice));
+                                    <del>£@wasprice.ToString("0.00") </del>
+                                }
+                                    £@Model.Product.sellPrice
+                            </h3>
                             <div class="rating">
                                 <div id="avarageRating"></div>
                                 <div class="rating-count">

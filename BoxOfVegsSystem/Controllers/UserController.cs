@@ -17,7 +17,6 @@ namespace BoxOfVegsSystem.Controllers
         InsertionServices insertservice = new InsertionServices();
         RetrievalServices retrieveservice = new RetrievalServices();
         UpdationServices updateservice = new UpdationServices();
-        DeletionServices deleteservice = new DeletionServices();
         [Authorize]
         public ActionResult UserProfile()
         {

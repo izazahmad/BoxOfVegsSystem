@@ -899,6 +899,13 @@ table {
     -o-transition: .4s ease;
     transition: .4s ease;
 }
+    .product-price del {
+        font-size: 16px;
+        color: #b2b2b2;
+        line-height: 1;
+        display: block;
+        display: inline-block;
+    }
 
 .product-instock {
     font-size: 15px;
@@ -1310,6 +1317,12 @@ table {
         margin-bottom: 25px;
         margin-right: 20px;
     }
+        #product-detail .product-info .price-rate .product-price del {
+            color: #b2b2b2;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 5px;
+        }
 
     #product-detail .product-info .price-rate .product-instock {
         font-size: 24px;

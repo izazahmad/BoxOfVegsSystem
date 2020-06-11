@@ -65,16 +65,20 @@ namespace BoxOfVegsSystem.Controllers
                     string path = System.IO.Path.Combine(Server.MapPath("~/Content/images/products"), fileName);
                     image.SaveAs(path);
                 }
-                pro.imageUrl = fileName;
-                var prct = retrieveservice.GetProduct(product.ProductId);
-                string imageurl = prct.imageUrl;
+                
                 if (product.ProductId > 0)
                 {
+                    var prct = retrieveservice.GetProduct(product.ProductId);
+                    string imageurl = prct.imageUrl;
+                    pro.productID = product.ProductId;
                     if (!string.IsNullOrEmpty(prct.imageUrl) && string.IsNullOrEmpty(fileName))
                     {
                         pro.imageUrl = prct.imageUrl;
                     }
-                    pro.productID = product.ProductId;
+                    else
+                    {
+                        pro.imageUrl = fileName;
+                    }
                     if (product.name != null)
                     {
                         pro.productName = product.name;
@@ -103,7 +107,7 @@ namespace BoxOfVegsSystem.Controllers
                     {
                         pro.profitPercentage = prct.profitPercentage;
                     }
-                    else if (product.profit > 0)
+                    else if (product.profit >= 0)
                     {
                         pro.profitPercentage = product.profit;
                     }
@@ -111,7 +115,7 @@ namespace BoxOfVegsSystem.Controllers
                     {
                         pro.profitPercentage = 0;
                     }
-                    if (product.discount > 0)
+                    if (product.discount >= 0)
                     {
                         pro.discount = product.discount;
                     }
@@ -163,7 +167,7 @@ namespace BoxOfVegsSystem.Controllers
                     int result = updateservice.updateProduct(pro);
                     if (result > 0)
                     {
-                        if (!string.IsNullOrEmpty(imageurl))
+                        if (!string.IsNullOrEmpty(imageurl) && !string.IsNullOrEmpty(fileName))
                         {
                             string path = HostingEnvironment.MapPath("~/Content/images/products/" + imageurl);
 
@@ -174,7 +178,7 @@ namespace BoxOfVegsSystem.Controllers
                 }
                 else
                 {
-
+                    pro.imageUrl = fileName;
                     pro.productName = product.name;
                     pro.description = product.Description;
                     pro.categoryID = product.categoryId;
@@ -197,10 +201,11 @@ namespace BoxOfVegsSystem.Controllers
             return View();
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult Delete(int productID)
         {
             deleteservice.DeleteProducts(productID);
+            
             return Json(new { message = "Deleted Successfully" }, JsonRequestBehavior.AllowGet);
 
         }

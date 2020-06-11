@@ -91,7 +91,7 @@ namespace BoxOfVegsSystem.Controllers
             return View(); 
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult Delete(int categoryId)
         {
             deleteservice.DeleteCategoryWithProducts(categoryId);

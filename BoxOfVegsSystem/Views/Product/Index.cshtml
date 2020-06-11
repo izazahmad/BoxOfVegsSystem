@@ -43,7 +43,7 @@
                             <td scope="row">@item.category.categoryName</td>
                             <td scope="row">@item.quantity</td>
                             <td scope="row">@item.purchasedPrice</td>
-                            @if (item.purchasedPrice != 0 || item.purchasedPrice != null)
+                            @if (item.purchasedPrice != 0 && item.purchasedPrice != null)
                             {
 
                                 <td scope="row">@item.profitPercentage <button type="button" id="@item.productID" class="square-btn black admin-table right editProfit">Edit</button></td>
@@ -92,6 +92,8 @@
             <div class="modal-body">
                 <form id="form">
                     <fieldset id="SubmitForm">
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                         @Html.HiddenFor(m => m.ProductId, new { @id = "productId" })
 
                         <div class="form-group">
@@ -129,6 +131,8 @@
             <div class="modal-body">
                 <form id="formDis">
                     <fieldset id="SubmitFormDis">
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                         @Html.HiddenFor(m => m.ProductId, new { @id = "productIdDis" })
 
                         <div class="form-group">
@@ -172,7 +176,10 @@
                 $("#purchasePrice").val(response.purchasedPrice);
                 $("#sellPrice").val(response.sellPrice);
 
-        })
+            })
+        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(textStatus + " " + errorThrown);
+			});
     });
     $("#profit").change(function () {
         var profit = $("#profit").val();
@@ -192,10 +199,12 @@
         var profit = $("#profit").val();
         var final = $("#sellPrice").val();
         var id = $("#productId").val();
+        var token = $('[name=__RequestVerificationToken]').val();
         $.ajax({
             type: 'POST',
             url: '@Url.Action("AddOrEditProduct","Product")',
             data: {
+                __RequestVerificationToken: token,
                 ProductId: id,
                 sellPrice: final,
                 profit: profit
@@ -216,7 +225,10 @@
                     })
 
 
-        })
+            })
+        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(textStatus + "\n" + errorThrown);
+			});
     });
     $(".editDiscount").click(function () {
         $("#discountModal").modal();
@@ -234,7 +246,10 @@
                 $("#purchasePriceDis").val(response.purchasedPrice);
                 $("#sellPriceDis").val(response.sellPrice);
 
-        })
+            })
+        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(textStatus + "\n" + errorThrown);
+			});
     });
     $("#discountDis").change(function () {
       
@@ -249,14 +264,17 @@
          $("#sellPriceDis").val(finalSell);  
     });
     $("#SaveDiscount").click(function () {
+        //debugger;
         var profit = $("#profitDis").val();
         var final = $("#sellPriceDis").val();
         var discount = $("#discountDis").val();
         var id = $("#productIdDis").val();
+        var token = $('[name=__RequestVerificationToken]').val();
         $.ajax({
             type: 'POST',
             url: '@Url.Action("AddOrEditProduct","Product")',
             data: {
+                __RequestVerificationToken: token,
                 ProductId: id,
                 sellPrice: final,
                 profit: profit,
@@ -278,7 +296,10 @@
                     })
 
 
-        })
+            })
+            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(XMLHttpRequest+ " " +textStatus + " " + errorThrown);
+			});
     });
     
     $(".ProdeleteBtn").click(function () {
@@ -300,7 +321,7 @@
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                type: 'POST',
+                    type: 'POST',
                 url: '@Url.Action("Delete","Product")',
                 data: {
                     productID: $(this).attr('data-id')
@@ -321,8 +342,8 @@
 
 
                 })
-                .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("FAIL");
+                    .fail(function (xhr, XMLHttpRequest, textStatus, errorThrown, status, error) {
+                        alert(textStatus + " " + XMLHttpRequest + " " + textStatus + " " + errorThrown + " " + status + " " + error + " " + xhr.status + " " + xhr.statusText);
                 })
 
             } else if (result.dismiss === swal.DismissReason.cancel) {

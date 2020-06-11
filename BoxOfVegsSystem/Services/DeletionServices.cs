@@ -44,7 +44,7 @@ namespace BoxOfVegsSystem.Services
             using (var context = new boxofvegsDBEntities())
             {
                 var product = context.products.Where(x => x.productID == Id).FirstOrDefault();
-                
+                context.Configuration.ProxyCreationEnabled = false;
 
                 if (product.imageUrl != null)
                 {
